@@ -81,7 +81,7 @@ void open_handler(struct intr_frame *frame)
 {
   char *file = (char *)(*((int *)frame->esp + 1));
   if (!valid_in_virtual_memory(file))
-    exit(-1);
+    exit(-1); 
   
   frame->eax = open(file);
 }
@@ -94,7 +94,7 @@ void get_file_size_handler(struct intr_frame *frame)
   int file_descriptor = (int)(*((int *)frame->esp + 1));
   struct user_file *f = get_file(file_descriptor);
   if (f == NULL){ 
-    frame->eax = -1;
+    frame->eax = -1;                            
     return;
   }
 
@@ -111,7 +111,7 @@ void read_handler(struct intr_frame *frame)
   if (file_descriptor == 1 || !valid_in_virtual_memory(buffer))
      exit(-1);
   
-  unsigned size = *((unsigned *)frame->esp + 3);
+  unsigned size = (unsigned)(*((int *)frame->esp + 3));
   frame->eax = read(file_descriptor, buffer, size);
 }
 
